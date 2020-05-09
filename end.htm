@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <META NAME="GENERATOR" Content="Microsoft Visual Studio 8.0">
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Intro to MapView - Create a 2D map - 4.15</title>
+    <style  type="text/css">
+      html,body
+      {height: 100%;
+        width: 100%;}
+     .title
+     {
+         font-size:35px;
+      }
+    
+      #Div1{
+        background-color:#4f9d9d;
+        height: 8%;
+        width: 100%;
+         float:left;
+      }
+      
+       #viewDiv {
+       
+        height: 84%;
+        width: 100%;
+         float:left;
+      }
+      
+     #viewDiv2{
+        background-color:Background;
+        height: 8%;
+        width: 100%;
+         float:left;
+      }
+      #coordsWidget{
+        background-color:#cf9e9e;
+      }
+     
+
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.15/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.15/"></script>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/Legend",
+        "esri/widgets/ScaleBar",
+        "esri/widgets/Search"
+      ], function(Map, MapView, FeatureLayer, Legend, ScaleBar, Search) {
+        var flayer = new FeatureLayer({
+          url:
+            "  http://www.arcgisonline.cn/server/rest/services/Hosted/%E5%8E%86%E5%8F%B2%E6%80%A7%E5%8D%81%E5%A4%A7%E6%88%98%E4%BA%89/FeatureServer"
+        });
+
+        var map = new Map({
+          basemap: "osm",
+          layers: [flayer]
+        });
+
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 3,
+          center: [71, 39] // longitude, latitude
+        });
+        
+         var view2=new MapView({
+          container: "viewDiv2"
+        });
+        
+        var legend = new Legend({
+          view: view,
+          layerInfos: [
+            {
+              layer: flayer,
+              title: "世界历史性十大战争"
+            }
+          ]
+        });
+
+        view.ui.add(legend, "bottom-right");
+
+        var scaleBar = new ScaleBar({
+          view: view,
+          style: "ruler",
+          unit: "metric"
+        });
+        view.ui.add(scaleBar, {
+          position: "bottom-left"
+        });
+
+        const searchWidget = new Search({
+          view: view
+        });
+        view.ui.add(searchWidget, {
+          position: "top-right",
+          index: 2
+        });
+ 
+        var coordsWidget = document.createElement("div");
+        coordsWidget.id = "coordsWidget";
+        coordsWidget.className = "esri-widget esri-component";
+        coordsWidget.style.padding = "9px 15px 5px";
+
+        view2.ui.add(coordsWidget, "bottom-right");
+        
+        function showCoordinates(pt) {
+          var coords =
+            "X/Y " +
+            pt.latitude.toFixed(3) +
+            " " +
+            pt.longitude.toFixed(3) +
+            " | Scale 1:" +
+            Math.round(view.scale * 1) / 1 +
+            " | Zoom " +
+            view.zoom;
+          coordsWidget.innerHTML = coords;
+        }
+        view.watch("stationary", function(isStationary) {
+          showCoordinates(view.center);
+        });
+
+        view.on("pointer-move", function(evt) {
+          showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+        });
+        
+      });
+    </script>
+  </head>
+  <body>
+     
+  <div id="Div1" class="title" style="color:Menu">世界历史性十大战争</div>
+ <div id="viewDiv"></div>
+ <div id="viewDiv2"></div>
+  <div id="coordsWidget"></div>
+  
+
+  </body>
+</html>
+
