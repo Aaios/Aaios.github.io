@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
   <head>
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
@@ -22,7 +22,12 @@
         width: 100%;
          float:left;
       }
-      
+        #viewDiv2{
+        background-color:Background;
+        height: 8%;
+        width: 100%;
+         float:left;
+      }
        #viewDiv {
        
         height: 84%;
@@ -30,14 +35,10 @@
          float:left;
       }
       
-     #viewDiv2{
-        background-color:Background;
-        height: 8%;
-        width: 100%;
-         float:left;
-      }
+   
       #coordsWidget{
         background-color:#cf9e9e;
+  
       }
      
 
@@ -118,13 +119,13 @@
         
         function showCoordinates(pt) {
           var coords =
-            "X/Y " +
+            "地理位置: X/Y " +
             pt.latitude.toFixed(3) +
             " " +
             pt.longitude.toFixed(3) +
-            " | Scale 1:" +
+            " | 比例尺 1:" +
             Math.round(view.scale * 1) / 1 +
-            " | Zoom " +
+            " | 缩放倍数:" +
             view.zoom;
           coordsWidget.innerHTML = coords;
         }
